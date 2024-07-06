@@ -35,7 +35,7 @@ class Home extends BaseController
 
     function HOMAgregarUsuario() {
         $datosGenerales = $this->request->getPost('datosGenerales');
-        if ($this->comprobarDatosAgregarUsuario($datosGenerales)) {
+        if (!$this->comprobarDatosAgregarUsuario($datosGenerales)) {
             return json_encode(false);
         }
 
@@ -43,11 +43,35 @@ class Home extends BaseController
         return json_encode($resultado);
     }
 
+    function HOMObtenerUsuario() {
+        $idUsuario = $this->request->getPost('idUsuario');
+
+        $resultado = $this->home_model->HOMObtenerUsuario($idUsuario);
+        return json_encode($resultado);
+    }
+
     function comprobarDatosAgregarUsuario($datosGenerales) {
-        $regContraseña = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/';
-        if (!preg_match($regContraseña, $datosGenerales["contraseña"] || strlen($datosGenerales["usuario"] < 5))) {
+        $regContraseña = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d._-]{8,}$/';
+        if (preg_match($regContraseña, $datosGenerales["contraseña"] || strlen($datosGenerales["usuario"] < 5))) {
             return false;
         }
         return true;
+    }
+
+    function HOMEditarUsuario() {
+        $datosGenerales = $this->request->getPost('datosGenerales');
+        if (!$this->comprobarDatosAgregarUsuario($datosGenerales)) {
+            return json_encode("false");
+        }
+
+        $resultado = $this->home_model->HOMEditarUsuario($datosGenerales);
+        return json_encode($resultado);
+    }
+
+    function HOMDeshabilitarUsuario() {
+        $idUsuario = $this->request->getPost('idUsuario');
+
+        $resultado = $this->home_model->HOMDeshabilitarUsuario($idUsuario);
+        return json_encode($resultado);
     }
 }
