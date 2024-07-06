@@ -62,6 +62,8 @@
             if (data) {
                 mensajeFunciono("Sesion Iniciada Correctamente");
                 irRegistro();
+            } else {
+                mensajeError("Usuario Deshabilitado o Inexistente");
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log(errorThrown);

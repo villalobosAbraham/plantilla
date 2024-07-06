@@ -33,10 +33,10 @@ class Home extends BaseController
 
         $idUsuario = $this->home_model->HOMIniciarSesion($datosGenerales);
         if (!$idUsuario) {
-            return false;
+            return json_encode(false);
         }
         $this->session->set('idUsuario', $idUsuario);
-        return $idUsuario;
+        return json_encode($idUsuario);
     }
 
     public function registro() {

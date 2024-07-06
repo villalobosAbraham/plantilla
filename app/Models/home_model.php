@@ -20,7 +20,8 @@ class home_model extends Model {
         $tabla->select("idusuario");
 
         $tabla->where("usuario", $datosGenerales["usuario"])
-              ->where("contraseña", $datosGenerales["contraseña"]);
+              ->where("contraseña", $datosGenerales["contraseña"])
+              ->where("activo", "S");
         
         $resultado = $tabla->get()->getRow();
         return $resultado ? $resultado->idusuario : false;
