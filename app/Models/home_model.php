@@ -15,7 +15,11 @@ class home_model extends Model {
 
 
     function obtenerUsuarios() {
-        return 4;
+        $tabla = $this->db->table("cat_usuarios");
+
+        $tabla->select("*");
+
+        return $tabla->get()->getResult();
     } 
 
 }

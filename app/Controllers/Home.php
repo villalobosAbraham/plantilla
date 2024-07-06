@@ -28,6 +28,6 @@ class Home extends BaseController
     function obtenerUsuarios() {
         $resultados = $this->home_model->obtenerUsuarios();
 
-        json_encode($resultados);
+        echo json_encode($resultados);
     }
 }

@@ -11,22 +11,16 @@
             <button id="entrada" class="btn btn-primary" onclick="abrirModalEditarUsuario()">Editar Usuario <i class="fa fa-pencil" aria-hidden="true"></i> </button>
             <button id="verdetalle" class="btn btn-primary" onclick="abrirModalEliminarUsuario()">Eliminar Usuario <i class="fa fa-user-times"></i></button>
         </div>
-        <div class="row" style="margin: 10px 15px; overflow-x: none;">
-            <table class="table table-bordered table-striped mb-none" id="tablaEntradaCompra">
+        <div class="row" style="margin: 10px 15px; overflow-x: none; min-width: 99%">
+            <table class="table table-bordered table-striped mb-none" id="tablaUsuarios" style="width: 99%; min-width: 99%">
                 <thead>
                 <tr>
                     <th></th>
-                    <th>Orden de compra</th>
-                    <th>maquinaria</th>
-                    <th>Obra</th>
-                    <th>Proveedor</th>
-                    <th>Estado de entrega</th>
-                    <th>Factura</th>
-                    <th>Observaciones</th>
+                    <th>Usuario</th>
+                    <th>fecha Registro</th>
+                    <th>Estado</th>
                 </tr>
                 </thead>
-                <tbody>
-                </tbody>
             </table>
         </div>
     </div>
@@ -88,10 +82,22 @@
 </div>
 <script>
     let ruta = "<?php echo base_url() ?>";
-
-    $(document).ready(function() {
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        $('#tablaUsuarios').DataTable({
+            "pageLength": 10,
+            "lengthChange": false,
+            "destroy": true,
+            "drawCallback": function() {
+                var radioButton = $(this).find("input:radio[name=opcionUsuario]").first();
+                radioButton.prop("checked", true); //marca automaticamente el primer valor que aparece en la tabla
+            },
+            "autoWidth": true,
+            "scrollY": "",
+        });
         obtenerUsuarios();
     });
+
 
     function obtenerUsuarios() {
         $.post(ruta + "HOMObtenerUsuarios", {
@@ -99,11 +105,32 @@
         }).done(function(data) {
             data = $.parseJSON(data);
             if (data) {
+                $("#tablaUsuarios").DataTable().clear().draw();
+                let tabla = $("#tablaUsuarios").DataTable();
                 
+                $(data).each((index, elemento) => {
+                    let action = "<input type='radio' checked='true' id='opcionOrden' name='opcionOrden' value='" + elemento.idusuario +"'>";
+                    let estado = prepararEstadoUsuario(elemento.activo);
+                    
+                    let fila = tabla.row.add([
+                        action,
+                        elemento.usuario,
+                        elemento.fecharegistro,
+                        estado
+                    ]).draw().node();
+                });
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log(errorThrown);
         });
+    }
+
+    function prepararEstadoUsuario(activo) {
+        if (activo == "S") {
+            return "Habilitado";
+        } else {
+            return "Deshabilitado"
+        }
     }
 
 </script>
