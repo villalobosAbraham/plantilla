@@ -6,21 +6,82 @@
             </div>
             <div class="panel-body">
                 <div id="form" class="form-horizontal">
-                    <p id="respuesta"></p>
                     <section class="panel">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Usuario:</label>
                             <input type="text" class="form-control" id="usuario" aria-describedby="emailHelp" placeholder="Ingresa tu correo">
-                            <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu correo con nadie más.</small>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Contraseña:</label>
                             <input type="password" class="form-control" id="contraseña" placeholder="Contraseña">
                         </div>
-                        <button class="btn btn-primary" style="margin-top: 10px;">Enviar</button>
+                        <button class="btn btn-primary" style="margin-top: 10px;" onclick="iniciarSesion();">Enviar</button>
                     </section>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script>
+    let ruta = "<?php echo base_url() ?>";
+    let regContraseña = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d._-]{8,}$/;
+
+    function mensajeErrorComprobacion(mensaje) {
+        Swal.fire({
+            title: "<h2>" + mensaje + "</h2>",
+            icon: "error"
+        });
+    }
+
+    function mensajeError(mensaje) {
+        Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "<h1>" + mensaje + "</h1>",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+
+    function mensajeFunciono(mensaje) {
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "<h1>" + mensaje + "</h1>",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+
+    function iniciarSesion() {
+        let datosGenerales = prepararDatosIniciarSesion();
+        $.post(ruta + "HOMIniciarSesion", {
+            datosGenerales : datosGenerales
+        }).done(function(data) {
+            data = $.parseJSON(data);
+            if (data) {
+                mensajeFunciono("Sesion Iniciada Correctamente");
+                irRegistro();
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        });
+    }
+
+    function prepararDatosIniciarSesion() {
+        let usuario = $("#usuario").val();
+        let contraseña = $("#contraseña").val();
+
+        let datosGenerales = {
+            usuario : usuario,
+            contraseña : contraseña,
+        };
+
+        return datosGenerales;
+    }
+
+    function irRegistro() {
+        window.location.href = ruta + "registro";
+    }
+    
+</script>

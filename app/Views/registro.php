@@ -7,10 +7,15 @@
     </header>
     <div class="panel-body">
         <div class="row" style="margin: 10px 0px; gap: 10px;">
-            <button id="datosproveedor" href="#datosprov" class="btn btn-primary modal-with-form" onclick="abrirModalCrearUsuario()">Agregar Usuario <i class="fa fa-user-plus"></i></button>
-            <button id="entrada" class="btn btn-primary" onclick="abrirModalEditarUsuario()">Editar Usuario <i class="fa fa-pencil" aria-hidden="true"></i> </button>
-            <button id="verdetalle" class="btn btn-primary" onclick="comprobarDeshabilitarUsuario()">Deshabilitar Usuario <i class="fa fa-ban"></i></button>
-            <button id="verdetalle" class="btn btn-primary" onclick="comprobarEliminarUsuario()">Eliminar Usuario <i class="fa fa-user-times"></i></button>
+            <div class="col-md-10">
+                <button class="btn btn-primary modal-with-form" onclick="abrirModalCrearUsuario()">Agregar Usuario <i class="fa fa-user-plus"></i></button>
+                <button class="btn btn-primary" onclick="abrirModalEditarUsuario()">Editar Usuario <i class="fa fa-pencil" aria-hidden="true"></i> </button>
+                <button class="btn btn-primary" onclick="comprobarDeshabilitarUsuario()">Deshabilitar Usuario <i class="fa fa-ban"></i></button>
+                <button class="btn btn-primary" onclick="comprobarEliminarUsuario()">Eliminar Usuario <i class="fa fa-user-times"></i></button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary" onclick="cerrarSesion()">Cerrar Sesion <i class="fa fa-sign-out"></i></button>
+            </div>
         </div>
         <div class="row" style="margin: 10px 15px; overflow-x: none; min-width: 99%">
             <table class="table table-bordered table-striped mb-none" id="tablaUsuarios" style="width: 99%; min-width: 99%">
@@ -401,5 +406,9 @@
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log(errorThrown);
         });
+    }
+
+    function cerrarSesion() {
+        window.location.href = ruta;
     }
 </script>

@@ -14,6 +14,17 @@ class home_model extends Model {
         $this->db = \Config\Database::connect();
     }
 
+    function HOMIniciarSesion($datosGenerales) {
+        $tabla = $this->db->table("cat_usuarios");
+
+        $tabla->select("idusuario");
+
+        $tabla->where("usuario", $datosGenerales["usuario"])
+              ->where("contraseña", $datosGenerales["contraseña"]);
+        
+        $resultado = $tabla->get()->getRow();
+        return $resultado ? $resultado->idusuario : false;
+    }
 
     function HOMObtenerUsuarios() {
         $tabla = $this->db->table("cat_usuarios");

@@ -9,27 +9,53 @@ class Home extends BaseController
 
     protected $home_model;
     protected $request;
+    protected $session;
 
     public function __construct()
     {
         $this->home_model = new home_model();
+        $this->session = \Config\Services::session();
         $this->request = \Config\Services::request(); // Cargar el servicio de solicitud
     }
     public function index()
     {
+        $this->session->destroy();
         $data = ["tittle" => "Inicio de Sesion"];
         
-        $ruta = ["ruta" => base_url()];
         echo view('/layouts/head', $data);
-        echo view('registro', $ruta);
+        echo view('login');
         echo view('/layouts/footer');
         echo view('scripts');
+    }
 
+    function HOMIniciarSesion() {
+        $datosGenerales = $this->request->getPost('datosGenerales');
+
+        $idUsuario = $this->home_model->HOMIniciarSesion($datosGenerales);
+        if (!$idUsuario) {
+            return false;
+        }
+        $this->session->set('idUsuario', $idUsuario);
+        return $idUsuario;
+    }
+
+    public function registro() {
+        if (!$this->session->has('idUsuario')) {
+            // Redirigir a la página de inicio
+            return redirect()->to(base_url());
+        }
+
+
+        $data = ["tittle" => "Inicio de Sesion"];
+        
+        echo view('/layouts/head', $data);
+        echo view('registro');
+        echo view('/layouts/footer');
+        echo view('scripts');
     }
 
     function HOMObtenerUsuarios() {
         $resultados = $this->home_model->HOMObtenerUsuarios();
-
         return json_encode($resultados);
     }
 
