@@ -8,36 +8,16 @@
                 <div id="form" class="form-horizontal">
                     <p id="respuesta"></p>
                     <section class="panel">
-                        <div class="form-group mb-lg">
-                            <label>Usuario</label>
-                            <div class="input-group input-group-icon">
-                                <input id="Usuario" name="Usuario" type="text" class="form-control input-lg" placeholder="Usuario" required />
-                                <span class="input-group-addon">
-                                    <span class="icon icon-lg">
-                                        <i class="fa fa-user"></i>
-                                    </span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="form-group mb-lg">
-                            <div class="clearfix">
-                                <label class="pull-left">Contraseña</label>
-                            </div>
-                            <div class="input-group input-group-icon">
-                                <input id="Password" name="Password" type="password" class="form-control input-lg" placeholder="Contraseña" required />
-                                <span class="input-group-addon">
-                                    <span class="icon icon-lg">
-                                        <i class="fa fa-lock"></i>
-                                    </span>
-                                </span>
-                            </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Usuario:</label>
+                            <input type="text" class="form-control" id="usuario" aria-describedby="emailHelp" placeholder="Ingresa tu correo">
+                            <small id="emailHelp" class="form-text text-muted">Nunca compartiremos tu correo con nadie más.</small>
                         </div>
                         <div class="form-group">
-                            <div class="col-md-12" style="display: flex; justify-content: space-between;">
-                                <a href="https://sistemasilsa.com:3670/" id="irsilsadrive" class="btn btn-primary" target="_blank">Silsa Drive</a>
-                                <button class="btn btn-primary" id="botonVerificar" onclick="verificarUsuario()">Entrar</button>
-                            </div>
+                            <label for="exampleInputPassword1">Contraseña:</label>
+                            <input type="password" class="form-control" id="contraseña" placeholder="Contraseña">
                         </div>
+                        <button class="btn btn-primary" style="margin-top: 10px;">Enviar</button>
                     </section>
                 </div>
             </div>
