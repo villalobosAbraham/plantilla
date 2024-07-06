@@ -6,4 +6,5 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Home::index');
-$routes->post("HOMObtenerUsuarios", "Home::obtenerUsuarios");
+$routes->post("HOMObtenerUsuarios", "Home::HOMObtenerUsuarios");
+$routes->post("HOMAgregarUsuario", "Home::HOMAgregarUsuario");

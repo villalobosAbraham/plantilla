@@ -29,43 +29,28 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="tituloModal" class="panel-title">Datos del proveedor</h2>
+                <h2 id="tituloModal" class="panel-title">Agregar Usuario</h2>
             </div>
             <div class="modal-body">
                 <div class="form-group mt-lg">
-                    <label class="col-sm-3 control-label text-right">Nombre:</label>
+                    <label class="col-sm-3 control-label text-right">Usuario:</label>
                     <div class="col-sm-9">
-                        <input type="text" id="nombreprov" name="nombreprov" class="form-control" readonly="readonly" placeholder="nombre Proveedor" value="" required="">
+                        <input type="text" id="nombreUsuario" class="form-control" placeholder="Nombre Usuario">
                     </div>
                 </div>  
                 <div class="form-group mt-lg">
-                    <label class="col-sm-3 control-label text-right">RFC:</label>
+                    <label class="col-sm-3 control-label text-right">Contraseña:</label>
                     <div class="col-sm-9">
-                        <input type="text" id="rfcprov" name="rfcprov" class="form-control" readonly="readonly" placeholder="rfc Proveedor" value="" required="">
+                        <input type="text" id="contraseñaUsuario" class="form-control" placeholder="Contraseña">
                     </div>
                 </div> 
                 <div class="form-group mt-lg">
-                    <label class="col-sm-3 control-label text-right">Correo:</label>
+                    <label class="col-sm-3 control-label text-right">Estado:</label>
                     <div class="col-sm-9">
-                        <input type="text" id="correoprov" name="correoprov" class="form-control" readonly="readonly" placeholder="correo Proveedor" value="" required="">
-                    </div>
-                </div> 
-                <div class="form-group mt-lg">
-                    <label class="col-sm-3 control-label text-right">Dias de crédito:</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="diascreditoprov" name="diascreditoprov" class="form-control" readonly="readonly" placeholder="dias de crédito Proveedor" value="" required="">
-                    </div>
-                </div> 
-                <div class="form-group mt-lg">
-                    <label class="col-sm-3 control-label text-right">Telefono:</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="telefonoprov" name="telefonoprov" class="form-control" readonly="readonly" placeholder="telefono Proveedor" value="" required="">
-                    </div>
-                </div> 
-                <div class="form-group mt-lg">
-                    <label class="col-sm-3 control-label text-right">Contacto:</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="contactoprov" name="contactoprov" class="form-control" readonly="readonly" placeholder="contacto Proveedor" value="" required="">
+                        <select class="form-control" id="estado">
+                            <option value="S">Habilitado</option>
+                            <option value="N">Deshabilitado</option>
+                        </select>
                     </div>
                 </div> 
             </div>
@@ -73,6 +58,7 @@
             <div class="modal-footer">
                 <div class="row">
                     <div class="col-md-12 text-right">
+                        <button class="btn btn-primary" onclick="comprobarUsuarioAgregar()">Agregar</button>
                         <button data-dismiss="modal" id="modalCancelar" class="btn btn-default" >Cerrar</button>
                     </div>
                 </div>
@@ -82,6 +68,34 @@
 </div>
 <script>
     let ruta = "<?php echo base_url() ?>";
+    let regContraseña = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+    function mensajeErrorComprobacion(mensaje) {
+        Swal.fire({
+            title: "<h2>" + mensaje + "</h2>",
+            icon: "error"
+        });
+    }
+
+    function mensajeError(mensaje) {
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "<h1>" + mensaje + "</h1>",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+
+    function mensajeFunciono(mensaje) {
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "<h1>" + mensaje + "</h1>",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
     
     document.addEventListener("DOMContentLoaded", function() {
         $('#tablaUsuarios').DataTable({
@@ -117,8 +131,9 @@
                         elemento.usuario,
                         elemento.fecharegistro,
                         estado
-                    ]).draw().node();
+                    ]);
                 });
+                tabla.draw();
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log(errorThrown);
@@ -131,6 +146,58 @@
         } else {
             return "Deshabilitado"
         }
+    }
+
+    function abrirModalCrearUsuario() {
+        $("#nombreUsuario, #contraseñaUsuario").val("").text("");
+        $("#estado").val("S");
+        $("#modalproveedor").modal("show");
+    }
+
+    function comprobarUsuarioAgregar() {
+        let usuario = $("#nombreUsuario").val();
+        let contraseña = $("#contraseñaUsuario").val();
+
+        if (!regContraseña.test(contraseña)) {
+            mensajeErrorComprobacion("Contraseña Invalida<br>8 Caracteres<br>1 Mayúscula<br>1 Minúscula<br>1 Numero");
+            return;
+        } else if (usuario.length < 5) {
+            mensajeErrorComprobacion("Usuario Invalido<br>Minimo 5 Caracteres");
+            return;
+        }
+
+        agregarUsuario(usuario, contraseña);
+    }
+
+    function agregarUsuario(usuario, contraseña) {
+        let datosGenerales = prepararDatosGeneralesAgregarUsuario(usuario, contraseña);
+
+        $.post(ruta + "HOMAgregarUsuario", {
+            datosGenerales : datosGenerales
+        }).done(function(data) {
+            data = $.parseJSON(data);
+            if (data) {
+                mensajeFunciono("Usuario Agregado Correctamente");
+                $("#modalproveedor").modal("hide");
+                obtenerUsuarios();
+            } else {
+                mensajeError("Fallo al Agregar el Usuario");
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        });
+    }
+
+    function prepararDatosGeneralesAgregarUsuario(usuario, contraseña) {
+        let estado = $("#estado").val();
+
+        let datosGenerales = {
+            usuario : usuario,
+            contraseña : contraseña,
+            estado : estado,
+        }   
+
+        return datosGenerales;
     }
 
 </script>
