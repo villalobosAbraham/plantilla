@@ -11,3 +11,4 @@ $routes->post("HOMAgregarUsuario", "Home::HOMAgregarUsuario");
 $routes->post("HOMObtenerUsuario", "Home::HOMObtenerUsuario");
 $routes->post("HOMEditarUsuario", "Home::HOMEditarUsuario");
 $routes->post("HOMDeshabilitarUsuario", "Home::HOMDeshabilitarUsuario");
+$routes->post("HOMEliminarUsuario", "Home::HOMEliminarUsuario");

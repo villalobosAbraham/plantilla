@@ -74,4 +74,11 @@ class Home extends BaseController
         $resultado = $this->home_model->HOMDeshabilitarUsuario($idUsuario);
         return json_encode($resultado);
     }
+
+    function HOMEliminarUsuario() {
+        $idUsuario = $this->request->getPost('idUsuario');
+
+        $resultado = $this->home_model->HOMEliminarUsuario($idUsuario);
+        return json_encode($resultado);
+    }
 }

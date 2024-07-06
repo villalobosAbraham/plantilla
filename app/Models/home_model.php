@@ -127,7 +127,6 @@ class home_model extends Model {
 
     function HOMDeshabilitarUsuario($idUsuario) {
         $actualizacion = $this->prepararDatosDeshabilitarUsuario();
-
         try {
             $this->db->transException(true)->transStart();
 
@@ -149,6 +148,23 @@ class home_model extends Model {
             "activo" => "N"
         );
         return $actualizacion;
+    }
+
+    function HOMEliminarUsuario($idUsuario) {
+        try {
+            $this->db->transException(true)->transStart();
+
+            $tabla = $this->db->table("cat_usuarios");
+
+            $tabla->where("idusuario", $idUsuario);
+            $tabla->delete();
+
+            $this->db->transComplete();
+            return true;
+        } catch(DataException $e) {
+            print_r($e);
+            return false;
+        }
     }
 }
 
